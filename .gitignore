@@ -1,0 +1,4 @@
+*.gz
+template.pdf
+*.aux
+template.log
