@@ -9,9 +9,12 @@
 \usepackage{verbatim}
 \usepackage{listings}
 \usepackage{float}
+\usepackage{subfig}
+\usepackage{hyperref}
 
 \begin{document}
-
+\setlength{\parindent}{3em}
+\setlength{\parskip}{1em}
 \setlength{\textwidth}{16cm}
 \setlength{\textheight}{22cm}
 
@@ -79,10 +82,44 @@ Ricardo Lopes - 201303933 \\
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{O Jogo Distrify}
 
-%Descrever detalhadamente o jogo, a sua história e, principalmente, as suas regras.
-%Devem ser incluidas imagens apropriadas para explicar o funcionamento do jogo.
-%Devem ser incluidas as fontes de informação (e.g. URLs em rodapé).
+\footnote{\url{https://boardgamegeek.com/boardgame/182752/distrify}}
+\footnote{\url{https://boardgamegeek.com/filepage/121580/distrify-sample-game-9x9} (Descarregar DistrifyGame.pdf)}
+\footnote{\url{https://boardgamegeek.com/filepage/121566/distrify-rules} (Descarregar Distrify.pdf)}
+Distrify é um jogo de tabuleiro, combinatorial e de conexão. Foi concebido a 22 de Agosto de 2015 por David Stoner.
+É constituído por um tabuleiro quadrado de 9x9 a 19x19 quadrículas e por duas peças de cor diferente (branco e preto).
+\subsection*{Regras}
+O jogador com as peças de cor preta começa a jogar posicionando uma peça numa qualquer quadrícula do tabuleiro. Seguidamente, existem duas possibilidades:
+\begin{enumerate}
+\item Colocar uma peça numa qualquer quadrícula desde que não forme um \textit{\textbf{crosscut}}.
+\item Colocar duas peças em quadrículas vazias, desde que não sejam adjacentes diagonalmente entre elas e não resultem num \textit{\textbf{triplet}} ou \textit{\textbf{crosscut}}.
+\end{enumerate}
+De realçar que \textbf{haverá sempre uma jogada válida}, pelo que os jogadores \textbf{não podem passar a vez}.
 
+\subsection*{Conceitos}
+\begin{itemize}
+\item \textit{\textbf{crosscut}}: quando se verifica uma cruz constituída pelo mesmo número de peças de ambos os jogadores. Vi-de fig.1.
+\item \textit{\textbf{triplet}}: quando 3 peças estão seguidas na horizontal, na vertical ou diagonalmente.
+\item Duas peças da mesma cor são consideradas \textbf{ligadas} quando estão adjacentes horizontalmente, verticalmente ou diagonalmente.
+\end{itemize}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale = 0.3]{images/crosscut.png}
+	\caption{Padrão de \textit{crosscut}}
+	\label{fig:crosscut}
+\end{figure}
+\subsection*{Objetivo}
+
+O jogador com peças pretas ganha se, a qualquer momento, se verificar um caminho contínuo de peças ligadas entre elas desde o topo do tabuleiro até à base (Fig.2 (a)).
+\par
+O jogador com peças brancas ganha se a qualquer momento se verificar um caminho contínuo de peças ligadas entre elas desde o lado esquerdo até ao lado direito do tabuleiro (Fig.2 (b)).
+
+\begin{figure}[H]
+	\centering
+	\subfloat[Caminho (a vermelho) de vitória das peças pretas.]{\includegraphics[width=0.3\textwidth]{images/blackWin.png}\label{fig:f1}}
+	\hfill
+	\subfloat[Caminho (a vermelho) de vitória das peças brancas.]{\includegraphics[width=0.3\textwidth]{images/whiteWin.png}\label{fig:f2}}
+	\caption{Exemplos de vitórias.}
+\end{figure}
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -91,19 +128,18 @@ Ricardo Lopes - 201303933 \\
 %Descrever a forma de representação do estado do tabuleiro (tipicamente uma lista de listas), com exemplificação em Prolog de posições iniciais do jogo, posições intermédias e finais, acompanhadas de imagens ilustrativas.
 
 Neste jogo a implementação mais simples para representar o tabuleiro é uma lista de listas. Cada lista da lista corresponde a uma linha do tabuleiro. Com esta implementção é mais fácil aceder às diferentes linhas do tabuleiro, visto que em Prolog a visita em listas é feita recursivamente.
-\linebreak\
-
+\par
 %%inicial
 \textbf{Representação do estado inicial do tabuleiro:}
 \lstinputlisting[language=Prolog, numbers=left, firstline=1, lastline=10, breaklines=true, showstringspaces=false, frame=single, columns=flexible]{../src/dristrify.pl}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale = 0.6]{images/inicial.png}
+	\includegraphics[scale = 0.5]{images/inicial.png}
 	\caption{Estado Inicial do Tabuleiro na consola}
 	\label{fig:estado_inicial}
 \end{figure}
-
+\newpage
 %%Intermedio
 \textbf{Representação de um estado intermédio do tabuleiro:}
 \linebreak
@@ -111,7 +147,7 @@ Neste jogo a implementação mais simples para representar o tabuleiro é uma li
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale = 0.6]{images/intermedio.png}
+	\includegraphics[scale = 0.5]{images/intermedio.png}
 	\caption{Um Estado Intermédio do tabuleiro na consola}
 	\label{fig:estado_intermedio}
 \end{figure}
@@ -136,7 +172,6 @@ Neste jogo a implementação mais simples para representar o tabuleiro é uma li
 %Deve ser incluída pelo menos uma imagem correspondente ao output produzido pelo predicado de visualização.
 
 Para obter a visualização de um tabuleiro basta utilizar o predicado Prolog  \textbf{printBoard(Board)}. Por sua vez, este utiliza os seguintes predicados: 
-\linebreak\
 \lstinputlisting[language=Prolog, numbers=left, firstline=34, lastline=53, breaklines=true, showstringspaces=false, frame=single, columns=flexible]{../src/dristrify.pl}
 A chamada deste predicado produz então o seguinte  \textit{output}:
 \begin{figure}[H]
@@ -153,11 +188,9 @@ A chamada deste predicado produz então o seguinte  \textit{output}:
 %Elencar os movimentos (tipos de jogadas) possíveis e definir os cabeçalhos dos predicados que serão utilizados (ainda não precisam de estar implementados).
 
 Em cada movimento o jogador pode colocar duas peças no tabuleiro. Para isso basta utilizar o seguinte predicado Prolog:
-\linebreak
-\linebreak
+\par
 \centerline{placePiece(Board, Player, Row, Column, NewBoard).}
-\linebreak
-\linebreak\
+\par
 A variável Board é uma lista de listas com o actual estado do jogo. A variável Player é uma variável que nos indica que jogador está a colocar a sua peça no tabuleiro. Row e Column indicam em que posição no tabuleiro irá ser colocada a peça. Já a NewBoard é a variável que irá conter o novo estado do jogo.
 
 

@@ -2,3 +2,5 @@
 template.pdf
 *.aux
 template.log
+*.out
+Relatorio Intermédio/texput.log
