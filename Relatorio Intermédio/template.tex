@@ -7,7 +7,7 @@
 \usepackage{indentfirst}
 \usepackage{graphicx}
 \usepackage{verbatim}
-
+\usepackage{listings}
 
 \begin{document}
 
@@ -92,9 +92,21 @@ Descrever a forma de representação do estado do tabuleiro (tipicamente uma lis
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Visualização do Tabuleiro}
 
-Descrever a forma de visualização do tabuleiro em modo de texto e o(s) predicado(s) Prolog construídos para o efeito.
-Deve ser incluída pelo menos uma imagem correspondente ao output produzido pelo predicado de visualização.
+%Descrever a forma de visualização do tabuleiro em modo de texto e o(s) predicado(s) Prolog construídos para o efeito.
+%Deve ser incluída pelo menos uma imagem correspondente ao output produzido pelo predicado de visualização.
 
+Para obter a visualização de um tabuleiro basta utilizar o predicado Prolog  \textbf{printBoard(Board)}. Por sua vez, este utiliza os seguintes predicados: 
+\linebreak\
+\lstinputlisting[language=Prolog, numbers=left, firstline=34, lastline=53, breaklines=true, showstringspaces=false, breakatwhitespace=false]{../src/dristrify.pl}
+A chamada deste predicado produz então o seguinte  \textit{output}:
+\linebreak\
+\linebreak\
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale = 0.5]{images/final.png}
+    \caption{Output do predicado de visualização}
+    \label{fig:final_board}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Movimentos}
