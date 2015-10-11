@@ -1,32 +1,40 @@
-tabuleiro([0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0]).
+Board([
+	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell],
+	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell],
+	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell],
+	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell],
+	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell],
+	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell],
+	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell],
+	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell],
+	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell]]).
 
-convertToChar(Number, Char) :- (Number =:= 0 -> Char = ' '; Number =:= -1 -> Char = 'O'; Char  = 'X').
-getCell(Column, Row, Cell) :- 
-Column > -1, Column < 11, Row > -1, Row < 11,
-N is Row * 11 + Column,
-tabuleiro(L1),
-nth0(N, L1, Cell).
+IntermediumBoard([
+	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, white, emptyCell],
+	[emptyCell, emptyCell, white, emptyCell, white, white, emptyCell, black, white],
+	[emptyCell, emptyCell, emptyCell, black, emptyCell, black, white, emptyCell, black],
+	[emptyCell, white, black, emptyCell, white, black, emptyCell, black, emptyCell],
+	[emptyCell, emptyCell, black, white, black, emptyCell, emptyCell, emptyCell, emptyCell],
+	[emptyCell, white, emptyCell, emptyCell, emptyCell, black, emptyCell, emptyCell, emptyCell],
+	[emptyCell, emptyCell, black, emptyCell, white, black, emptyCell, emptyCell, emptyCell],
+	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, white, black, white, emptyCell],
+	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell]]).
+
+FinalBoard([
+	[emptyCell, emptyCell, emptyCell, black, emptyCell, emptyCell, black, white, emptyCell],
+	[emptyCell, emptyCell, white, black, white, white, emptyCell, black, white],
+	[emptyCell, white, emptyCell, black, white, black, white, emptyCell, black],
+	[emptyCell, white, black, emptyCell, white, black, white, black, emptyCell],
+	[emptyCell, emptyCell, black, white, black, emptyCell, emptyCell, white, black],
+	[emptyCell, white, black, emptyCell, white, black, emptyCell, emptyCell, emptyCell],
+	[emptyCell, emptyCell, black, emptyCell, white, black, emptyCell, emptyCell, emptyCell],
+	[emptyCell, white, white, white, emptyCell, white, black, white, emptyCell],
+	[emptyCell, emptyCell, black, emptyCell, emptyCell, emptyCell, black, emptyCell, emptyCell]]).
 
 
-printAux(N) :- 
-Total is 11*11,
-N < Total,
-Resto is N mod 10,
-nth0(N, L1, Cell),
-tabuleiro(L1),
-convertToChar(Cell,Char),
-write(char)
-(Resto =:= 0 -> write(\n);),
-printAux(N+1).
+convertToChar(Cell, Char) :- (Cell =:= emptyCell -> Char = ' '; 
+	Cell =:= black -> Char = 'O'; 
+	Char  = 'X').
 
-printTabuleiro() :- printAux(0).
+printBoardLine([Head|Tail]) :- (Head =/= nil -> convertToChar(Head,Char), write(char), printBoardLine(Tail)).
+printBoard([Head|Tail]) :- (Head =/= nil -> printBoardLine(Head), printBoard(Tail)).
