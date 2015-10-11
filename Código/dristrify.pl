@@ -36,5 +36,5 @@ convertToChar(Cell, Char) :- (Cell =:= emptyCell -> Char = ' ';
 	Cell =:= black -> Char = 'O'; 
 	Char  = 'X').
 
-printBoardLine([Head|Tail]) :- (Head =/= nil -> convertToChar(Head,Char), write(char), printBoardLine(Tail)).
-printBoard([Head|Tail]) :- (Head =/= nil -> printBoardLine(Head), printBoard(Tail)).
+printBoardLine([Head|Tail]) :- (Head =/= 0 -> convertToChar(Head,Char), write(char), printBoardLine(Tail)).
+printBoard([Head|Tail]) :- (Head =/= 0 -> printBoardLine(Head), printBoard(Tail)).
