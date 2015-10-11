@@ -8,6 +8,7 @@
 \usepackage{graphicx}
 \usepackage{verbatim}
 \usepackage{listings}
+\usepackage{float}
 
 \begin{document}
 
@@ -78,17 +79,56 @@ Ricardo Lopes - 201303933 \\
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{O Jogo Distrify}
 
-Descrever detalhadamente o jogo, a sua história e, principalmente, as suas regras.
-Devem ser incluidas imagens apropriadas para explicar o funcionamento do jogo.
-Devem ser incluidas as fontes de informação (e.g. URLs em rodapé).
+%Descrever detalhadamente o jogo, a sua história e, principalmente, as suas regras.
+%Devem ser incluidas imagens apropriadas para explicar o funcionamento do jogo.
+%Devem ser incluidas as fontes de informação (e.g. URLs em rodapé).
 
 
+\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Representação do Estado do Jogo}
 
-Descrever a forma de representação do estado do tabuleiro (tipicamente uma lista de listas), com exemplificação em Prolog de posições iniciais do jogo, posições intermédias e finais, acompanhadas de imagens ilustrativas.
+%Descrever a forma de representação do estado do tabuleiro (tipicamente uma lista de listas), com exemplificação em Prolog de posições iniciais do jogo, posições intermédias e finais, acompanhadas de imagens ilustrativas.
 
+Neste jogo a implementação mais simples para representar o tabuleiro é uma lista de listas. Cada lista da lista corresponde a uma linha do tabuleiro. Com esta implementção é mais fácil aceder às diferentes linhas do tabuleiro, visto que em Prolog a visita em listas é feita recursivamente.
+\linebreak\
 
+%%inicial
+\textbf{Representação do estado inicial do tabuleiro:}
+\lstinputlisting[language=Prolog, numbers=left, firstline=1, lastline=10, breaklines=true, showstringspaces=false, frame=single, columns=flexible]{../src/dristrify.pl}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale = 0.6]{images/inicial.png}
+	\caption{Estado Inicial do Tabuleiro na consola}
+	\label{fig:estado_inicial}
+\end{figure}
+
+%%Intermedio
+\textbf{Representação de um estado intermédio do tabuleiro:}
+\linebreak
+\lstinputlisting[language=Prolog, numbers=left, firstline=12, lastline=21, breaklines=true, showstringspaces=false, frame=single, columns=flexible]{../src/dristrify.pl}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale = 0.6]{images/intermedio.png}
+	\caption{Um Estado Intermédio do tabuleiro na consola}
+	\label{fig:estado_intermedio}
+\end{figure}
+\newpage
+%%Final
+\textbf{Representação de um estado final do tabuleiro:}
+\linebreak
+\lstinputlisting[language=Prolog, numbers=left, firstline=23, lastline=32, breaklines=true, showstringspaces=false, frame=single, columns=flexible]{../src/dristrify.pl}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale = 0.5]{images/final.png}
+	\caption{Um Estado Final do Tabuleiro na consola}
+	\label{fig:estado_final}
+\end{figure}
+
+\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Visualização do Tabuleiro}
 
@@ -97,21 +137,28 @@ Descrever a forma de representação do estado do tabuleiro (tipicamente uma lis
 
 Para obter a visualização de um tabuleiro basta utilizar o predicado Prolog  \textbf{printBoard(Board)}. Por sua vez, este utiliza os seguintes predicados: 
 \linebreak\
-\lstinputlisting[language=Prolog, numbers=left, firstline=34, lastline=53, breaklines=true, showstringspaces=false, breakatwhitespace=false]{../src/dristrify.pl}
+\lstinputlisting[language=Prolog, numbers=left, firstline=34, lastline=53, breaklines=true, showstringspaces=false, frame=single, columns=flexible]{../src/dristrify.pl}
 A chamada deste predicado produz então o seguinte  \textit{output}:
-\linebreak\
-\linebreak\
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
-    \includegraphics[scale = 0.5]{images/final.png}
+    \includegraphics[scale = 0.4]{images/final.png}
     \caption{Output do predicado de visualização}
     \label{fig:final_board}
 \end{figure}
 
+\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Movimentos}
 
-Elencar os movimentos (tipos de jogadas) possíveis e definir os cabeçalhos dos predicados que serão utilizados (ainda não precisam de estar implementados).
+%Elencar os movimentos (tipos de jogadas) possíveis e definir os cabeçalhos dos predicados que serão utilizados (ainda não precisam de estar implementados).
+
+Em cada movimento o jogador pode colocar duas peças no tabuleiro. Para isso basta utilizar o seguinte predicado Prolog:
+\linebreak
+\linebreak
+\centerline{placePiece(Board, Player, Row, Column, NewBoard).}
+\linebreak
+\linebreak\
+A variável Board é uma lista de listas com o actual estado do jogo. A variável Player é uma variável que nos indica que jogador está a colocar a sua peça no tabuleiro. Row e Column indicam em que posição no tabuleiro irá ser colocada a peça. Já a NewBoard é a variável que irá conter o novo estado do jogo.
 
 
 \end{document}
