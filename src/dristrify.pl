@@ -71,7 +71,8 @@ main:-
 	repeat,
 	retract(state(T1, P1)),
 	play(T1, P1, T2, P2),
-	assert(state(T2, P2)).
+	assert(state(T2, P2)),
+	termina.
 
 play(B1, P1, B2, P2):- playerToString(P1, String),
 	write(string),
@@ -85,8 +86,7 @@ play(B1, P1, B2, P2):- playerToString(P1, String),
 	setPiece(R, C, P1, B1, B2),
 	( P1 == black -> P2 = white;
 	P2 = black),
-	printBoard(B2),
-	!.
+	printBoard(B2).
 
 setPiece(0, ElemCol, NewElem, [RowAtTheHead|RemainingRows], [NewRowAtTheHead|RemainingRows]):-
 	setPieceList(ElemCol, NewElem, RowAtTheHead, NewRowAtTheHead).
@@ -100,7 +100,7 @@ setPieceList(I, Elem, [H|L], [H|ResL]):-
 	I > 0,
 	I1 is I-1,
 	setListElemAtWith(I1, Elem, L, ResL).
-
+termina:- !.
 
 
 
