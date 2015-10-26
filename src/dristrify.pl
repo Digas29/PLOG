@@ -1,3 +1,4 @@
+:- include("interface.pl").
 emptyBoard([
 	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell],
 	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell],
@@ -31,24 +32,77 @@ finalBoard([
 	[emptyCell, white, white, white, emptyCell, white, black, white, emptyCell],
 	[emptyCell, emptyCell, black, emptyCell, emptyCell, emptyCell, black, emptyCell, emptyCell]]).
 
-rowIdentifiers([' 1 ',' 2 ', ' 3 ',' 4 ',' 5 ',' 6 ',' 7 ',' 8 ', ' 9 ']).
+player1(black).
+player2(white).
 
-getSymbol(emptyCell, ' ').
-getSymbol(white, 'O').
-getSymbol(black, '#').
+playerToString(black, 'black').
+playerToString(white, 'white').
+
+columnToInt('A', 0).
+columnToInt('B', 1).
+columnToInt('C', 2).
+columnToInt('D', 3).
+columnToInt('E', 4).
+columnToInt('F', 5).
+columnToInt('G', 6).
+columnToInt('H', 7).
+columnToInt('I', 8).
+
+columnToInt('a', 0).
+columnToInt('b', 1).
+columnToInt('c', 2).
+columnToInt('d', 3).
+columnToInt('e', 4).
+columnToInt('f', 5).
+columnToInt('h', 6).
+columnToInt('h', 7).
+columnToInt('i', 8).
+
+:- dynamic state(Board, InitialPlayer).
+
+distrify:- 
+InitialBoard(T),
+player1(P),
+assert(state(T,P)),
+printBoard(T),
+main.
+
+main:-
+	repeat,
+	retract(state(T1, P1)),
+	play(T1, P1, T2, P2),
+	assert(state(T2, P2)).
+
+play(B1, P1, B2, P2):- playerToString(P1, String),
+	write(string),
+	write(' turn'),
+	nl,
+	write('Column:'),
+	getChar(Char),
+	columnToInt(Char, C),
+	write('Row:'),
+	getInt(R),
+	setPiece(R, C, P1, B1, B2),
+	( P1 == black -> P2 = white;
+	P2 = black),
+	printBoard(B2),
+	!.
+
+setPiece(0, ElemCol, NewElem, [RowAtTheHead|RemainingRows], [NewRowAtTheHead|RemainingRows]):-
+	setPieceList(ElemCol, NewElem, RowAtTheHead, NewRowAtTheHead).
+setPiece(ElemRow, ElemCol, NewElem, [RowAtTheHead|RemainingRows], [RowAtTheHead|ResultRemainingRows]):-
+	ElemRow > 0,
+	ElemRow1 is ElemRow-1,
+	setMatrixElemAtWith(ElemRow1, ElemCol, NewElem, RemainingRows, ResultRemainingRows).
+	
+setPieceList(0, Elem, [_|L], [Elem|L]).
+setPieceList(I, Elem, [H|L], [H|ResL]):-
+	I > 0,
+	I1 is I-1,
+	setListElemAtWith(I1, Elem, L, ResL).
 
 
-printColumnId :- write('      A     B     C     D     E     F     G     H     I'),nl.
-printInitialSeparator :- write('    _____________________________________________________ '),nl.
-printMiddleSeparator :- write('   |     |     |     |     |     |     |     |     |     |'),nl.
-printFinalSeparator :-  write('   |_____|_____|_____|_____|_____|_____|_____|_____|_____|'),nl.
 
-printCell(Char) :- write('|  '), write(Char), write('  ').
-printBoardLine([]) :- write('|'), nl, printFinalSeparator.
-printBoardLine([Head|Tail]) :- getSymbol(Head,Char), printCell(Char), printBoardLine(Tail).
 
-printBoardAux([],[]) :- nl.
-printBoardAux([Head|Tail], [RowId|RowTail]) :- printMiddleSeparator, write(RowId), printBoardLine(Head), printBoardAux(Tail, RowTail).
 
-printBoard(Board) :- printColumnId, printInitialSeparator, rowIdentifiers(RowId), printBoardAux(Board, RowId).
 
