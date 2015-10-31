@@ -1,4 +1,6 @@
-:- include("interface.pl").
+:- include('interface.pl').
+
+
 emptyBoard([
 	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell],
 	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell],
@@ -58,10 +60,10 @@ columnToInt('h', 6).
 columnToInt('h', 7).
 columnToInt('i', 8).
 
-:- dynamic state(Board, InitialPlayer).
+:- dynamic state/2.
 
-distrify:- 
-InitialBoard(T),
+distrify:-
+emptyBoard(T),
 player1(P),
 assert(state(T,P)),
 printBoard(T),
@@ -75,34 +77,38 @@ main:-
 	termina.
 
 play(B1, P1, B2, P2):- playerToString(P1, String),
-	write(string),
+	write(String),
 	write(' turn'),
 	nl,
-	write('Column:'),
-	getChar(Char),
-	columnToInt(Char, C),
-	write('Row:'),
-	getInt(R),
-	setPiece(R, C, P1, B1, B2),
+	getNewPieceInfo(C,R),
+	setPiece(R, C, String, B1, B2),
 	( P1 == black -> P2 = white;
 	P2 = black),
-	printBoard(B2).
+	printBoard(B2),
+	!.
+
+getNewPieceInfo(Column, Row):-
+	write('Column:'),
+	getChar(Char),
+	columnToInt(Char, Column),
+	write('Row:'),
+	getInt(R),
+	Row is R - 1.
 
 setPiece(0, ElemCol, NewElem, [RowAtTheHead|RemainingRows], [NewRowAtTheHead|RemainingRows]):-
 	setPieceList(ElemCol, NewElem, RowAtTheHead, NewRowAtTheHead).
+
 setPiece(ElemRow, ElemCol, NewElem, [RowAtTheHead|RemainingRows], [RowAtTheHead|ResultRemainingRows]):-
 	ElemRow > 0,
 	ElemRow1 is ElemRow-1,
-	setMatrixElemAtWith(ElemRow1, ElemCol, NewElem, RemainingRows, ResultRemainingRows).
-	
+	setPiece(ElemRow1, ElemCol, NewElem, RemainingRows, ResultRemainingRows).
+
 setPieceList(0, Elem, [_|L], [Elem|L]).
+
 setPieceList(I, Elem, [H|L], [H|ResL]):-
 	I > 0,
 	I1 is I-1,
-	setListElemAtWith(I1, Elem, L, ResL).
-termina:- !.
+	setPieceList(I1, Elem, L, ResL).
 
 
-
-
-
+termina:- false.

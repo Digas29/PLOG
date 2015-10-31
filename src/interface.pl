@@ -17,7 +17,7 @@ printBoardLine([Head|Tail]) :- getSymbol(Head,Char), printCell(Char), printBoard
 printBoardAux([],[]) :- nl.
 printBoardAux([Head|Tail], [RowId|RowTail]) :- printMiddleSeparator, write(RowId), printBoardLine(Head), printBoardAux(Tail, RowTail).
 
-printBoard(Board) :- printColumnId, printInitialSeparator, rowIdentifiers(RowId), printBoardAux(Board, RowId).
+printBoard(Board) :- write('\33\[2J'), printColumnId, printInitialSeparator, rowIdentifiers(RowId), printBoardAux(Board, RowId).
 
 
 getChar(Input):-
@@ -26,4 +26,5 @@ getChar(Input):-
 
 getInt(Input):-
 	get_code(TempInput),
-	Input is TempInput - 48.
+	Input is TempInput - 48,
+	get_code(_).
