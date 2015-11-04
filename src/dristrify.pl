@@ -1,5 +1,5 @@
 :- include('interface.pl').
-
+:- include('utils.pl').
 
 emptyBoard([
 	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell],
@@ -63,7 +63,7 @@ columnToInt('i', 8).
 :- dynamic state/2.
 
 distrify:-
-emptyBoard(T),
+finalBoard(T),
 player1(P),
 assert(state(T,P)),
 printBoard(T),
@@ -72,16 +72,17 @@ main.
 main:-
 	repeat,
 	retract(state(T1, P1)),
-	play(T1, P1, T2, P2),
-	assert(state(T2, P2)),
-	termina.
+	%%play(T1, P1, T2, P2),
+	%%assert(state(T2, P2)),
+	done(T1,P1),
+	mensagem.
 
 play(B1, P1, B2, P2):- playerToString(P1, String),
 	write(String),
 	write(' turn'),
 	nl,
 	getNewPieceInfo(C,R),
-	setPiece(R, C, String, B1, B2),
+	setPiece(R, C, P1, B1, B2),
 	( P1 == black -> P2 = white;
 	P2 = black),
 	printBoard(B2),
@@ -95,20 +96,76 @@ getNewPieceInfo(Column, Row):-
 	getInt(R),
 	Row is R - 1.
 
-setPiece(0, ElemCol, NewElem, [RowAtTheHead|RemainingRows], [NewRowAtTheHead|RemainingRows]):-
-	setPieceList(ElemCol, NewElem, RowAtTheHead, NewRowAtTheHead).
 
-setPiece(ElemRow, ElemCol, NewElem, [RowAtTheHead|RemainingRows], [RowAtTheHead|ResultRemainingRows]):-
-	ElemRow > 0,
-	ElemRow1 is ElemRow-1,
-	setPiece(ElemRow1, ElemCol, NewElem, RemainingRows, ResultRemainingRows).
+adjacent(R, C, R1, C1):-
+	R1 is R + 1,
+	C1 is C + 1,
+	R1 =< 8,
+	C1 =< 8.
 
-setPieceList(0, Elem, [_|L], [Elem|L]).
+adjacent(R, C, R, C1):-
+	C1 is C + 1,
+	C1 =< 8.
 
-setPieceList(I, Elem, [H|L], [H|ResL]):-
-	I > 0,
-	I1 is I-1,
-	setPieceList(I1, Elem, L, ResL).
+adjacent(R, C, R1, C1):-
+	R1 is R - 1,
+	C1 is C + 1,
+	R1 >= 0,
+	C1 =< 8.
 
+adjacent(R, C, R1, C):-
+	R1 is R - 1,
+	R1 >= 0.
 
-termina:- false.
+adjacent(R, C, R1, C1):-
+	R1 is R - 1,
+	C1 is C - 1,
+	R1 >= 0,
+	C1 >= 0.
+
+adjacent(R, C, R, C1):-
+	C1 is C - 1,
+	C1 >= 0.
+
+adjacent(R, C, R1, C1):-
+	R1 is R + 1,
+	C1 is C - 1,
+	R1 =< 8,
+	C1 >= 0.
+
+adjacent(R, C, R1, C):-
+	R1 is R + 1,
+	R1 =< 8.
+
+path([[R,8] | _], Board, white):-
+	getPiece(R,8, Board, Piece),
+	Piece == white.
+path([[8,C] | _], Board, black):-
+	getPiece(8,C, Board, Piece),
+	Piece == black.
+
+path([[R,C] | T], Board, Player):-
+	adjacent(R, C, R1, C1),
+	once(getPiece(R1,C1, Board, Piece)),
+	Piece == Player,
+	\+ member([R1, C1], T),
+	path([[R1, C1] | [[R,C] | T]], Board, Player).
+startPath(9,_,_,black).
+startPath(_,9,_,white).
+startPath(R,C, Board, white):-
+	R =< 8,
+	C =< 8,
+	getPiece(R,C, Board, Piece),
+	(Piece \== white ->  R1 is R + 1, startPath(R1, C, Board, white);
+	(\+ path([[R,C]], Board, white) -> R1 is R + 1, startPath(R1, C, Board, white))).
+
+startPath(R,C, Board, black):-
+	R =< 8,
+	C =< 8,
+	getPiece(R,C, Board, Piece),
+	(Piece \== black ->  C1 is C + 1, startPath(R, C1, Board, black);
+	(\+ path([[R,C]], Board, black) -> C1 is C + 1, startPath(R, C1, Board, black);
+	true)).
+
+mensagem:- write('fim!'), nl.
+done(Board, Player):- startPath(0,0,Board,Player).
