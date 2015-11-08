@@ -22,7 +22,7 @@
 \title{\Huge\textbf{Distrify}\linebreak\linebreak\linebreak
 \Large\textbf{Relatório Final}\linebreak\linebreak
 \linebreak\linebreak
-\includegraphics[scale=0.1]{feup-logo.png}\linebreak\linebreak
+\includegraphics[scale=0.1]{images/feup-logo.png}\linebreak\linebreak
 \linebreak\linebreak
 \Large{Mestrado Integrado em Engenharia Informática e Computação} \linebreak\linebreak
 \Large{Programação em Lógica}\linebreak
@@ -43,7 +43,6 @@ Ricardo Lopes - 201303933 \\
 \newpage
 
 \section*{Resumo}
-Resumo sucinto do trabalho com 150 a 250 palavras (problema abordado, objetivo, como foi o problema resolvido/abordado, principais resultados e conclusões).
 
 Foi proposto pelos docentes da unidade curricular Programação em Lógica o desenvolvimento em Prolog, linguagem geralmente utilizada para desenvolvimento de inteligência artificial e linguística computacional, de um jogo de tabuleiro para dois jogares.
 
@@ -73,7 +72,7 @@ Concluimos que Prolog é uma linguagem muito interessante ao nível de implement
 
 Este trabalho tem como objetivo desenvolver um jogo de tabuleiro para duas pessoas sendo que o desenvolvimento da parte lógica será através da utilização da linguagem Prolog e a implementação de uma interface gráfica adquada ao jogo, de modo a numa fase posterior possibilitar o desenvolvimento gráfico da aplicação baseando-se no Prolog como meio de comunicação entre diferentes ferramentas que permitem uma ligação entre a parte lógica e gráfica do jogo.
 
-O relatório está estruturado de forma a dar a conhecer o jogo, primeiramente pela enumeração e explicação das suas regras, conceitos e objetivos depois o modo de implementação, a sua explicação lógica e estados de jogo e, por fim, é dada uma ideia da interface gráfica.
+O relatório está estruturado de forma a dar a conhecer o jogo, primeiramente pela enumeração e explicação das suas regras, conceitos e objetivos depois o modo de implementação, a sua explicação lógica e estados de jogo e, por fim, é abordada a interface gráfica.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{O Jogo Distrify}
@@ -117,11 +116,61 @@ O jogador com peças brancas ganha se a qualquer momento se verificar um caminho
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Lógica do Jogo}
 
-Descrever o projeto e implementação da lógica do jogo em Prolog, incluindo a forma de representação do estado do tabuleiro e sua visualização, execução de movimentos, verificação do cumprimento das regras do jogo, determinação do final do jogo e cálculo das jogadas a realizar pelo computador utilizando diversos níveis de jogo. Sugere-se a estruturação desta secção da seguinte forma:
+Nesta secção será explicada a implementação da parte lógica do Distrify como a representação do estado do tabuleiro e sua visualização, execução de movimentos, verificação do cumprimento das regras do jogo, determinação do final do jogo e cálculo das jogadas a realizar pelo computador utilizando diversos níveis de jogo.
 
-\subsection{Representação do Estado do Jogo} Pode ser idêntico ao descrito no relatório intercalar.)
+\subsection{Representação do Estado do Jogo}
 
-\subsection{Visualização do Tabuleiro} (Pode ser idêntico ao descrito no relatório intercalar.)
+Neste jogo a implementação mais simples para representar o tabuleiro é uma lista de listas. Cada lista da lista corresponde a uma linha do tabuleiro. Com esta implementção é mais fácil aceder às diferentes linhas do tabuleiro, visto que em Prolog a visita em listas é feita recursivamente.
+\par
+%%inicial
+\textbf{Representação do estado inicial do tabuleiro:}
+\lstinputlisting[language=Prolog, numbers=left, firstline=6, lastline=15, breaklines=true, showstringspaces=false, frame=single, columns=flexible]{dristrify.pl}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale = 0.5]{images/inicial.png}
+	\caption{Estado Inicial do Tabuleiro na consola}
+	\label{fig:estado_inicial}
+\end{figure}
+\newpage
+%%Intermedio
+\textbf{Representação de um estado intermédio do tabuleiro:}
+\linebreak
+\lstinputlisting[language=Prolog, numbers=left, firstline=12, lastline=21, breaklines=true, showstringspaces=false, frame=single, columns=flexible]{dristrify.pl}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale = 0.5]{images/intermedio.png}
+	\caption{Um Estado Intermédio do tabuleiro na consola}
+	\label{fig:estado_intermedio}
+\end{figure}
+\newpage
+%%Final
+\textbf{Representação de um estado final do tabuleiro:}
+\linebreak
+\lstinputlisting[language=Prolog, numbers=left, firstline=1, lastline=10, breaklines=true, showstringspaces=false, frame=single, columns=flexible]{delete.pl}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale = 0.5]{images/final.png}
+	\caption{Um Estado Final do Tabuleiro na consola}
+	\label{fig:estado_final}
+\end{figure}
+
+\newpage
+
+\subsection{Visualização do Tabuleiro} 
+
+Para obter a visualização de um tabuleiro basta utilizar o predicado Prolog  \textbf{printBoard(Board)}. Por sua vez, este utiliza os seguintes predicados: 
+\lstinputlisting[language=Prolog, numbers=left, firstline=12, lastline=21, breaklines=true, showstringspaces=false, frame=single, columns=flexible]{delete.pl}
+
+A chamada deste predicado produz então o seguinte  \textit{output}:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.4]{images/final.png}
+    \caption{Output do predicado de visualização}
+    \label{fig:final_board}
+\end{figure}
 
 \subsection{Lista de Jogadas Válidas} Obtenção de uma lista de jogadas possíveis. Exemplo: \textit{valid\_moves(+Board, -ListOfMoves)}.
 
@@ -137,8 +186,11 @@ Descrever o projeto e implementação da lógica do jogo em Prolog, incluindo a 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Interface com o Utilizador}
 
-Descrever o módulo de interface com o utilizador em modo de texto.
+De modo a criar uma interface gráfica em modo de texto, foi criado uma ficheiro apenas direcionado para esta questão: interface.pl. Neste ficheiro encontra-se implementada uma função que imprime o menu do jogo, onde é possivel escolher o modo do jogo assim com um pequeno tutorial. 
 
+Existem variadissimas funções que chamadas imprimem o tabuleiro sejam as legendas alfanuméricas, linhas, barras, espaços em branco ou os carateres de jogada. 
+
+Encontram-se também desenvolvidas duas funções de leitura e tratamento de caracteres e inteiros do teclado por parte do jogador, isto de modo a ser possivel escolher uma casa no tabuleiro através das coordenadas de uma linha e uma coluna.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusões}
