@@ -1,5 +1,6 @@
 :- include('interface.pl').
 :- include('utils.pl').
+:- include('rules.pl').
 
 emptyBoard([
 	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell],
@@ -97,4 +98,5 @@ getNewPieceInfo(Column, Row):-
 	Row is R - 1.
 
 done(Board, Player):- startPath(0,0,Board,Player).
+
 mensagem:- write('fim!'), nl.
