@@ -24,6 +24,17 @@ getPieceList(Col, [_| Tails], Piece):-
 	Col1 is Col - 1,
 	getPieceList(Col1, Tails, Piece).
 
+getNewPieceInfo(Column, Row):-
+	repeat,
+	write('Column:'),
+	getChar(Char),
+	columnToInt(Char, Column),
+	write('Row:'),
+	getInt(R),
+	R =< 9,
+	R >= 1,
+	Row is R - 1.
+
 player1(black).
 player2(white).
 

@@ -1,6 +1,7 @@
 :- include('interface.pl').
 :- include('utils.pl').
 :- include('rules.pl').
+:- include('delete.pl').
 
 emptyBoard([
 	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell],
@@ -13,47 +14,38 @@ emptyBoard([
 	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell],
 	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell]]).
 
-intermediumBoard([
-	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, white, emptyCell],
-	[emptyCell, emptyCell, white, emptyCell, white, white, emptyCell, black, white],
-	[emptyCell, emptyCell, emptyCell, black, emptyCell, black, white, emptyCell, black],
-	[emptyCell, white, black, emptyCell, white, black, emptyCell, black, emptyCell],
-	[emptyCell, emptyCell, black, white, black, emptyCell, emptyCell, emptyCell, emptyCell],
-	[emptyCell, white, emptyCell, emptyCell, emptyCell, black, emptyCell, emptyCell, emptyCell],
-	[emptyCell, emptyCell, black, emptyCell, white, black, emptyCell, emptyCell, emptyCell],
-	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, white, black, white, emptyCell],
-	[emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell, emptyCell]]).
-
-finalBoard([
-	[emptyCell, emptyCell, emptyCell, black, emptyCell, emptyCell, black, white, emptyCell],
-	[emptyCell, emptyCell, white, black, white, white, emptyCell, black, white],
-	[emptyCell, white, emptyCell, black, white, black, white, emptyCell, black],
-	[emptyCell, white, black, emptyCell, white, black, white, black, emptyCell],
-	[emptyCell, emptyCell, black, white, black, emptyCell, emptyCell, white, black],
-	[emptyCell, white, black, emptyCell, white, black, emptyCell, black, emptyCell],
-	[emptyCell, emptyCell, black, emptyCell, white, black, emptyCell, black, emptyCell],
-	[emptyCell, white, white, white, emptyCell, white, black, white, emptyCell],
-	[emptyCell, emptyCell, black, emptyCell, emptyCell, emptyCell, black, emptyCell, emptyCell]]).
-
-
 :- dynamic state/2.
 
 distrify:-
-emptyBoard(T),
-player1(P),
-assert(state(T,P)),
-printBoard(T),
-main.
+	repeat,
+	mainMenu,
+	write('Option: '),
+	getInt(R),
+	R >= 1,
+	R =< 4,
+	menuOption(R, Pred),
+	Pred.
 
-main:-
+menuOption(1, playerVsPlayer).
+menuOption(2, playerVsPlayer).
+menuOption(3, playerVsPlayer).
+menuOption(4, playerVsPlayer).
+
+playerVsPlayer:-emptyBoard(T),
+	player1(P),
+	assert(state(T,P)),
+	printBoard(T),
+	mainPvP.
+
+mainPvP:-
 	repeat,
 	retract(state(T1, P1)),
-	play(T1, P1, T2, P2),
+	playPvP(T1, P1, T2, P2),
 	assert(state(T2, P2)),
 	done(T1,P1),
-	mensagem.
+	mensagem(P1).
 
-play(B1, P1, B2, P2):- playerToString(P1, String),
+playPvP(B1, P1, B2, P2):- playerToString(P1, String),
 	write(String),
 	write(' turn'),
 	nl,
@@ -73,17 +65,7 @@ play(B1, P1, B2, P2):- playerToString(P1, String),
 	P2 = black),
 	!.
 
-getNewPieceInfo(Column, Row):-
-	repeat,
-	write('Column:'),
-	getChar(Char),
-	columnToInt(Char, Column),
-	write('Row:'),
-	getInt(R),
-	R =< 9,
-	R >= 1,
-	Row is R - 1.
 
 done(Board, Player):- startPath(0,0,Board,Player).
 
-mensagem:- write('fim!'), nl.
+mensagem(P1):- playerToString(P1, S), write(S), write(' wins!'), nl.

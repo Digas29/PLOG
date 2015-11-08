@@ -28,3 +28,21 @@ getInt(Input):-
 	get_code(TempInput),
 	Input is TempInput - 48,
 	get_code(_), !.
+
+mainMenu:-
+	write('\33\[2J'),
+	write('==========================================='), nl,
+	write('=                                         ='), nl,
+	write('=         WELCOME TO DISTRIFY!!!          ='), nl,
+	write('=                                         ='), nl,
+	write('=                                         ='), nl,
+	write('=         1. Play Human vs Human          ='), nl,
+	write('=                                         ='), nl,
+	write('=        2. Play Human vs Computer        ='), nl,
+	write('=                                         ='), nl,
+	write('=       3. Play Computer vs Computer      ='), nl,
+	write('=                                         ='), nl,
+	write('=               4. Tutorial               ='), nl,
+	write('=                                         ='), nl,
+	write('=                                         ='), nl,
+	write('==========================================='), nl.
