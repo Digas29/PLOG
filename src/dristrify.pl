@@ -35,36 +35,11 @@ finalBoard([
 	[emptyCell, white, white, white, emptyCell, white, black, white, emptyCell],
 	[emptyCell, emptyCell, black, emptyCell, emptyCell, emptyCell, black, emptyCell, emptyCell]]).
 
-player1(black).
-player2(white).
-
-playerToString(black, 'black').
-playerToString(white, 'white').
-
-columnToInt('A', 0).
-columnToInt('B', 1).
-columnToInt('C', 2).
-columnToInt('D', 3).
-columnToInt('E', 4).
-columnToInt('F', 5).
-columnToInt('G', 6).
-columnToInt('H', 7).
-columnToInt('I', 8).
-
-columnToInt('a', 0).
-columnToInt('b', 1).
-columnToInt('c', 2).
-columnToInt('d', 3).
-columnToInt('e', 4).
-columnToInt('f', 5).
-columnToInt('h', 6).
-columnToInt('h', 7).
-columnToInt('i', 8).
 
 :- dynamic state/2.
 
 distrify:-
-intermediateBoard(T),
+emptyBoard(T),
 player1(P),
 assert(state(T,P)),
 printBoard(T),
@@ -83,18 +58,30 @@ play(B1, P1, B2, P2):- playerToString(P1, String),
 	write(' turn'),
 	nl,
 	getNewPieceInfo(C,R),
+	getPiece(R, C, B1, Piece),
+	Piece == emptyCell,
+	validFirstMove(R,C,B1,P1, Triplet),
 	setPiece(R, C, P1, B1, B2),
+	printBoard(B2),
+	( Triplet == 0 -> getNewPieceInfo(C2,R2),
+	getPiece(R2, C2, B2, Piece2),
+	Piece2 == emptyCell,
+	validSecondMove(R2,C2,B2,P1),
+	setPiece(R2, C2, P1, B2, B3),
+	printBoard(B3); write('When you creat a triplet you only have one move!'), nl),
 	( P1 == black -> P2 = white;
 	P2 = black),
-	printBoard(B2),
 	!.
 
 getNewPieceInfo(Column, Row):-
+	repeat,
 	write('Column:'),
 	getChar(Char),
 	columnToInt(Char, Column),
 	write('Row:'),
 	getInt(R),
+	R =< 9,
+	R >= 1,
 	Row is R - 1.
 
 done(Board, Player):- startPath(0,0,Board,Player).

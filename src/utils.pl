@@ -23,3 +23,29 @@ getPieceList(Col, [_| Tails], Piece):-
 	Col > 0,
 	Col1 is Col - 1,
 	getPieceList(Col1, Tails, Piece).
+
+player1(black).
+player2(white).
+
+playerToString(black, 'black').
+playerToString(white, 'white').
+
+columnToInt('A', 0).
+columnToInt('B', 1).
+columnToInt('C', 2).
+columnToInt('D', 3).
+columnToInt('E', 4).
+columnToInt('F', 5).
+columnToInt('G', 6).
+columnToInt('H', 7).
+columnToInt('I', 8).
+
+columnToInt('a', 0).
+columnToInt('b', 1).
+columnToInt('c', 2).
+columnToInt('d', 3).
+columnToInt('e', 4).
+columnToInt('f', 5).
+columnToInt('h', 6).
+columnToInt('h', 7).
+columnToInt('i', 8).

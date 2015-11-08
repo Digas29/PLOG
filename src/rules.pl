@@ -1,27 +1,4 @@
-crosscut(R, C, R1, C1, R, C1, R1, C):-
-	R1 is R + 1,
-	C1 is C + 1,
-	R1 =< 8,
-	C1 =< 8.
-
-crosscut(R, C, R1, C1, R, C1, R1, C):-
-	R1 is R + 1,
-	C1 is C - 1,
-	R1 =< 8,
-	C1 >= 0.
-
-crosscut(R, C, R1, C1, R, C1, R1, C):-
-	R1 is R - 1,
-	C1 is C - 1,
-	R1 =< 8,
-	C1 =< 8.
-
-crosscut(R, C, R1, C1, R, C1, R1, C):-
-	R1 is R - 1,
-	C1 is C + 1,
-	R1 >= 0,
-	C1 =< 8.
-
+/* PATH FINDER */
 adjacent(R, C, R1, C1):-
 	R1 is R + 1,
 	C1 is C + 1,
@@ -93,6 +70,32 @@ startPath(R,C, Board, black):-
 	(\+ path([[R,C]], Board, black) -> C1 is C + 1, startPath(R, C1, Board, black);
 	true)).
 
+/* CROSSCUT RULE */
+
+crosscut(R, C, R1, C1, R, C1, R1, C):-
+	R1 is R + 1,
+	C1 is C + 1,
+	R1 =< 8,
+	C1 =< 8.
+
+crosscut(R, C, R1, C1, R, C1, R1, C):-
+	R1 is R + 1,
+	C1 is C - 1,
+	R1 =< 8,
+	C1 >= 0.
+
+crosscut(R, C, R1, C1, R, C1, R1, C):-
+	R1 is R - 1,
+	C1 is C - 1,
+	R1 =< 8,
+	C1 =< 8.
+
+crosscut(R, C, R1, C1, R, C1, R1, C):-
+	R1 is R - 1,
+	C1 is C + 1,
+	R1 >= 0,
+	C1 =< 8.
+
 checkCrosscut(R, C, Board, Player):-
 	crosscut(R, C, R1, C1, R2, C2, R3, C3),
 	getPiece(R1, C1, Board, Piece),
@@ -100,22 +103,75 @@ checkCrosscut(R, C, Board, Player):-
 	getPiece(R2, C2, Board, Piece2),
 	Piece2 \== Player,
 	getPiece(R3, C3, Board, Piece3),
-	Piece3 \== Player.
+	Piece3 \== Player,
+	write('Invalid move... It creates a crosscut!'), nl.
 
-triplet(R,C,Board,Player):-
-  Rm2 is Row - 2,
+/* TRIPLET RULE */
+tripletV(R,C,Board,Player):-
+  Rm2 is R - 2,
   Rm2 >= 0,
-  Rm1 is Row - 1,
+  Rm1 is R- 1,
   getPiece(Rm2, C, Board, Piece),
 	Piece == Player,
 	getPiece(Rm1, C, Board, Piece2),
 	Piece2 == Player.
-triplet(R,C,Board,Player):-
-  Rm1 is Row - 1,
-  Rm2 >= 0,
-  Rp1 is Row + 1,
+
+tripletV(R,C,Board,Player):-
+  Rm1 is R - 1,
+  Rm1 >= 0,
+  Rp1 is R + 1,
+	Rp1 =< 8,
   getPiece(Rm1, C, Board, Piece),
 	Piece == Player,
 	getPiece(Rp1, C, Board, Piece2),
 	Piece2 == Player.
-checkTriplet(R, C, Board, Player):- nl.
+
+tripletV(R,C,Board,Player):-
+	Rp1 is R + 1,
+	Rp1 =< 8,
+	Rp2 is R + 2,
+	Rp2 =< 8,
+  getPiece(Rp1, C, Board, Piece),
+	Piece == Player,
+	getPiece(Rp2, C, Board, Piece2),
+	Piece2 == Player.
+
+tripletH(R,C,Board,Player):-
+  Cm2 is C - 2,
+  Cm2 >= 0,
+  Cm1 is C - 1,
+	getPiece(R, Cm1, Board, Piece2),
+	Piece2 == Player,
+  getPiece(C, Cm2, Board, Piece),
+	Piece == Player.
+
+tripletH(R,C,Board,Player):-
+	Cm1 is C - 1,
+	Cm1 >= 0,
+	Cp1 is C + 1,
+	Cp1 =< 8,
+	getPiece(R, Cm1, Board, Piece),
+	Piece == Player,
+	getPiece(R, Cp1, Board, Piece2),
+	Piece2 == Player.
+
+tripletH(R,C,Board,Player):-
+	Cp1 is C + 1,
+	Cp1 =< 8,
+	Cp2 is C + 2,
+	Cp2 =< 8,
+	getPiece(R, Cp1, Board, Piece),
+	Piece == Player,
+	getPiece(R, Cp2, Board, Piece2),
+	Piece2 == Player.
+
+checkTriplet(R,C,Board,Player):- tripletV(R,C,Board,Player), write('It creates a vertical triplet!'), nl;
+	tripletH(R,C,Board,Player), write('It creates a horizontal triplet!'), nl.
+
+validFirstMove(R, C, Board, Player, Triplet):-
+	\+ checkCrosscut(R,C,Board,Player),
+	(checkTriplet(R,C,Board,Player) -> Triplet = 1; Triplet = 0).
+
+validSecondMove(R, C, Board, Player):-
+	\+ checkCrosscut(R,C,Board,Player),
+	\+ checkTriplet(R,C,Board,Player).

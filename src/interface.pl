@@ -22,9 +22,9 @@ printBoard(Board) :- write('\33\[2J'), printColumnId, printInitialSeparator, row
 
 getChar(Input):-
 	get_char(Input),
-	get_char(_).
+	get_char(_), !.
 
 getInt(Input):-
 	get_code(TempInput),
 	Input is TempInput - 48,
-	get_code(_).
+	get_code(_), !.
