@@ -111,11 +111,11 @@ triplet(R,C,Board,Player):-
 	getPiece(Rm1, C, Board, Piece2),
 	Piece2 == Player.
 triplet(R,C,Board,Player):-
-  Rm2 is Row - 2,
-  Rm2 >= 0,
   Rm1 is Row - 1,
-  getPiece(Rm2, C, Board, Piece),
+  Rm2 >= 0,
+  Rp1 is Row + 1,
+  getPiece(Rm1, C, Board, Piece),
 	Piece == Player,
-	getPiece(Rm1, C, Board, Piece2),
+	getPiece(Rp1, C, Board, Piece2),
 	Piece2 == Player.
 checkTriplet(R, C, Board, Player):- nl.
