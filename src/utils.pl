@@ -18,7 +18,7 @@ getPiece(Row, Col, [_| Tails], Piece):-
 	Row1 is Row - 1,
 	getPiece(Row1, Col, Tails, Piece).
 
-getPieceList(0, [Head |_], Head).
+getPieceList(0, [Head |_], Head):- !.
 getPieceList(Col, [_| Tails], Piece):-
 	Col > 0,
 	Col1 is Col - 1,
