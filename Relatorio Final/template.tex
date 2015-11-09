@@ -173,31 +173,57 @@ A chamada deste predicado produz então o seguinte  \textit{output}:
     \label{fig:final_board}
 \end{figure}
 
-\subsection{Lista de Jogadas Válidas} Obtenção de uma lista de jogadas possíveis. Exemplo: \textit{valid\_moves(+Board, -ListOfMoves)}.
+\subsection{Lista de Jogadas Válidas} 
 
-\subsection{Execução de Jogadas} Validação e execução de uma jogada num tabuleiro, obtendo o novo estado do jogo. Exemplo: \textit{move(+Move, +Board, -NewBoard)}.
+Não foi implementada qualquer função que permitisse validar as jogadas. O próprio motor do jogo faz as verificações necessárias.
 
-\subsection{Avaliação do Tabuleiro} Avaliação do estado do jogo, que permitirá comparar a aplicação das diversas jogadas disponíveis. Exemplo: \textit{value(+Board, +Player, -Value)}.
+\subsection{Execução de Jogadas} 
 
-\subsection{Final do Jogo} Verificação do fim do jogo, com identificação do vencedor. Exemplo: \textit{game\_over(+Board, -Winner)}.
+O predicado play passa como parâmetros os jogadores um e dois assim como os seus tabuleiros. Entre outras, chama o predicado setPiece onde passa a linha, a coluna, o novo elemento, o tabuleiro e o novo tabuleiro.
 
-\subsection{Jogada do Computador} Escolha da jogada a efetuar pelo computador, dependendo do nível de dificuldade. Por exemplo: \textit{choose\_move(+Level, +Board, -Move)}.
+\textit{play(B1, P1, B2,P2)}.
+
+\textit{setPiece(R, C, elem, Board, NewBoard)}.
+
+\subsection{Avaliação do Tabuleiro} 
+
+É verificada célula a célula atribuindo-se um valor por cada peça adjacente, no final escolhe a célula com melhor pontuação, ou seja, com mais peças adjacentes.
+
+\textit{greedyCell(Board, Player, R, C)}.
+
+
+\subsection{Final do Jogo} 
+
+A verificação do vencedor do jogo é feita através da função done, implementada no ficheiro distrify.pl que chama a função startPath, implementada no ficheiro rules.pl. No caso das peças pretas, o predicado verifica se há um caminho de peças ligadas continuamente desde a parte de cima até à parte de baixo do tabuleiro. Em contrapartida, no caso das peças brancas verifica a existência  do caminho desde a esquerda até à direita.
+
+\textit{done(Board, Player):- startPath(0,0,Board,Player)}.
+
+\textit{startPath(R,C, Board, black)}.
+
+\subsection{Jogada do Computador} 
+
+A execução de jogadas do computador é através da chamada da função bot, que passa como parâmetros  a dificuldade, o tabuleiro, a linha e a coluna, respetivamente. Esta função chama a função botRandom que gera aleatoriamente os indíces de uma coluna e uma linha.
+
+\textit{bot(Dif, Board, R, C)}.
+
+\textit{botRandom(R, C)}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Interface com o Utilizador}
 
-De modo a criar uma interface gráfica em modo de texto, foi criado uma ficheiro apenas direcionado para esta questão: interface.pl. Neste ficheiro encontra-se implementada uma função que imprime o menu do jogo, onde é possivel escolher o modo do jogo assim com um pequeno tutorial. 
+De modo a criar uma interface gráfica em modo de texto, foi criado um ficheiro apenas direcionado para esta questão: interface.pl. Neste ficheiro encontra-se implementada uma função que imprime o menu do jogo, onde é possível escolher o modo do jogo assim com um pequeno tutorial. 
 
-Existem variadissimas funções que chamadas imprimem o tabuleiro sejam as legendas alfanuméricas, linhas, barras, espaços em branco ou os carateres de jogada. 
+Existem variadíssimas funções que chamadas imprimem o tabuleiro sejam as legendas alfanuméricas, linhas, barras, espaços em branco ou os carateres de jogada. 
 
-Encontram-se também desenvolvidas duas funções de leitura e tratamento de caracteres e inteiros do teclado por parte do jogador, isto de modo a ser possivel escolher uma casa no tabuleiro através das coordenadas de uma linha e uma coluna.
+Encontram-se também desenvolvidas duas funções de leitura e tratamento de caracteres e inteiros do teclado por parte do jogador, isto de modo a ser possível escolher uma casa no tabuleiro através das coordenadas de uma linha e uma coluna.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusões}
-Que conclui deste projecto? Como poderia melhorar o trabalho desenvolvido?
 
-Concluimos que a linguagem Prolog é muito útil e propicia no desenvolvimento lógico de um jogo, permitindo estruturar de uma forma mais conseguida a ideia do jogo em si.
+Concluímos que a linguagem Prolog é muito útil e propicia no desenvolvimento lógico de um jogo, permitindo estruturar de uma forma mais conseguida e correta a ideia do jogo em si, oferecendo ferramentas de desenvolvimento muito úteis.
+
+Gostaríamos de ter tido tempo para implementar todas as funções propostas que decerto tornariam o jogo mais completo.
 
 \clearpage
 \addcontentsline{toc}{section}{Bibliografia}
@@ -208,6 +234,30 @@ Concluimos que a linguagem Prolog é muito útil e propicia no desenvolvimento l
 \newpage
 \appendix
 \section{Nome do Anexo}
-Código Prolog implementado devidamente comentado e outros elementos úteis que não sejam essenciais ao relatório.
+
+\subsection{distrify.pl}
+
+\lstinputlisting[language=Prolog, numbers=left, firstline=1, lastline=69, breaklines=true, showstringspaces=false, frame=single, columns=flexible]{dristrify.pl}
+
+\subsection{interface.pl}
+
+\lstinputlisting[language=Prolog, numbers=left, firstline=1, lastline=141, breaklines=true, showstringspaces=false, frame=single, columns=flexible]{interface.pl}
+
+\subsection{rules.pl}
+
+\lstinputlisting[language=Prolog, numbers=left, firstline=1, lastline=178, breaklines=true, showstringspaces=false, frame=single, columns=flexible]{rules.pl}
+
+\subsection{utils.pl}
+
+\lstinputlisting[language=Prolog, numbers=left, firstline=1, lastline=67, breaklines=true, showstringspaces=false, frame=single, columns=flexible]{utils.pl}
+
+\subsection{bot.pl}
+
+\lstinputlisting[language=Prolog, numbers=left, firstline=1, lastline=6, breaklines=true, showstringspaces=false, frame=single, columns=flexible]{bot.pl}
+
+\subsection{delete.pl}
+
+\lstinputlisting[language=Prolog, numbers=left, firstline=1, lastline=21, breaklines=true, showstringspaces=false, frame=single, columns=flexible]{delete.pl}
+
 
 \end{document}
