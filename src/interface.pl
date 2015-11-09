@@ -29,6 +29,9 @@ getInt(Input):-
 	Input is TempInput - 48,
 	get_code(_), !.
 
+waitForEnter:-
+	get_char(_).
+
 mainMenu:-
 	write('\33\[2J'),
 	write('==========================================='), nl,
@@ -46,3 +49,21 @@ mainMenu:-
 	write('=                                         ='), nl,
 	write('=                                         ='), nl,
 	write('==========================================='), nl.
+
+	botDifficulty:-
+		write('\33\[2J'),
+		write('==========================================='), nl,
+		write('=                                         ='), nl,
+		write('=             BOT DIFICULTY!!!            ='), nl,
+		write('=                                         ='), nl,
+		write('=                                         ='), nl,
+		write('=                                         ='), nl,
+		write('=                                         ='), nl,
+		write('=                1. Random                ='), nl,
+		write('=                                         ='), nl,
+		write('=                2. Greedy                ='), nl,
+		write('=                                         ='), nl,
+		write('=                                         ='), nl,
+		write('=                                         ='), nl,
+		write('=                                         ='), nl,
+		write('==========================================='), nl.

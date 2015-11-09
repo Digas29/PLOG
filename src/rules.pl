@@ -60,7 +60,8 @@ startPath(R,C, Board, white):-
 	C =< 8,
 	getPiece(R,C, Board, Piece),
 	(Piece \== white ->  R1 is R + 1, startPath(R1, C, Board, white);
-	(\+ path([[R,C]], Board, white) -> R1 is R + 1, startPath(R1, C, Board, white))).
+	(\+ path([[R,C]], Board, white) -> R1 is R + 1, startPath(R1, C, Board, white);
+	true)).
 
 startPath(R,C, Board, black):-
 	R =< 8,
@@ -69,7 +70,6 @@ startPath(R,C, Board, black):-
 	(Piece \== black ->  C1 is C + 1, startPath(R, C1, Board, black);
 	(\+ path([[R,C]], Board, black) -> C1 is C + 1, startPath(R, C1, Board, black);
 	true)).
-
 /* CROSSCUT RULE */
 
 crosscut(R, C, R1, C1, R, C1, R1, C):-
@@ -102,9 +102,10 @@ checkCrosscut(R, C, Board, Player):-
 	Piece == Player,
 	getPiece(R2, C2, Board, Piece2),
 	Piece2 \== Player,
+	Piece2 \== emptyCell,
 	getPiece(R3, C3, Board, Piece3),
-	Piece3 \== Player,
-	write('Invalid move... It creates a crosscut!'), nl.
+	Piece3 \== emptyCell,
+	Piece3 \== Player.
 
 /* TRIPLET RULE */
 tripletV(R,C,Board,Player):-
@@ -165,8 +166,8 @@ tripletH(R,C,Board,Player):-
 	getPiece(R, Cp2, Board, Piece2),
 	Piece2 == Player.
 
-checkTriplet(R,C,Board,Player):- tripletV(R,C,Board,Player), write('It creates a vertical triplet!'), nl;
-	tripletH(R,C,Board,Player), write('It creates a horizontal triplet!'), nl.
+checkTriplet(R,C,Board,Player):- tripletV(R,C,Board,Player);
+	tripletH(R,C,Board,Player).
 
 validFirstMove(R, C, Board, Player, Triplet):-
 	\+ checkCrosscut(R,C,Board,Player),
