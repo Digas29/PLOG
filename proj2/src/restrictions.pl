@@ -91,4 +91,7 @@ solveBoard(Board, Solved):-
   transpose(NewBoard1, Solved),
   dotRestrictions(Solved, Size),
   append(Solved, L),
-  labeling([ffc, up, bisect], L).
+  statistics(walltime,_),
+  labeling([ffc,bisect], L),
+  statistics(walltime,[_,T]),
+  assert(time(T)).
