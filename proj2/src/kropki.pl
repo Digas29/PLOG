@@ -6,7 +6,7 @@
 
 
 kropki:-
-  sizeMenu,
+  mainMenu,
   write('Size: '),
   getInt(Size),
   play(Size).
